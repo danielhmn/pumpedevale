@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Es tu pumpeaños?</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="pumpe.css">
+        <style>
+            .confeti {
+                position: fixed;
+                inset: 0;
+                overflow: hidden;
+                pointer-events: none;
+                z-index: 1;
+                perspective: 900px;
+            }
+
+            .hpp {
+                position: relative;
+                z-index: 2;
+            }
+
+            .confeti-pieza {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: var(--ancho);
+                height: var(--alto);
+                background: var(--color);
+                border-radius: 2px;
+                transform-origin: center;
+                animation: explosion var(--duracion) cubic-bezier(.12, .65, .2, 1) forwards;
+            }
+
+            @keyframes explosion {
+                0% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(.15) rotate(0deg);
+                }
+                8% {
+                    opacity: 1;
+                }
+                32% {
+                    transform: translate(calc(-50% + var(--x-explosion)), calc(-50% + var(--y-explosion))) rotate(var(--giro-1));
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(calc(-50% + var(--x-final)), calc(-50% + var(--y-final))) rotate(var(--giro-2));
+                }
+            }
+        </style>
+</head>
+<body>
+    <div class="confeti" id="confeti"></div>
+    <a class="boton-inicio" href="index.html">Volver al inicio</a>
+    <div class="hpp">
+        <div class="feli">
+            <h1>¡FELIZ PUMPEAÑOS!</h1>
+        </div>
+        <img id="imagen-pumpe" src="hpumpe.png" alt="Pumpeaños">
+    </div>
+    <p class="texto-regalo" hidden></p>
+    <div class="elige">
+        <p>Elige una opción de pumpeaños:</p>
+    </div>
+    <button class="boton-velas" type="button" hidden>Apaga las velas y pide un deseo</button>
+    <div class="items">
+    <button class="past" type="button"><img src="iconpastel.png" alt=""></button>
+    <button class="regalo" type="button"><img src="regalo.png" alt=""></button>
+    <button class="mañanitas" type="button"><img src="maña.png" alt=""></button>
+    </div>
+    <section class="seccion-regalos" hidden>
+        <p class="titulo-regalos">Abre los regalos</p>
+        <div class="regalos-cajas">
+        <article class="regalo-caja" data-imagen="flores.png" data-alt="Flores">
+            <button class="boton-caja" type="button" aria-label="Abrir regalo de flores">
+                <img src="caja.png" alt="">
+            </button>
+        </article>
+        <article class="regalo-caja" data-imagen="cancion.png" data-alt="Canción">
+            <button class="boton-caja" type="button" aria-label="Abrir regalo de canción">
+                <img src="caja.png" alt="">
+            </button>
+        </article>
+        <article class="regalo-caja" data-imagen="amores.png" data-alt="Amores">
+            <button class="boton-caja" type="button" aria-label="Abrir regalo de amores">
+                <img src="caja.png" alt="">
+            </button>
+        </article>
+        </div>
+    </section>
+    <button class="boton-musica" type="button" hidden>Reproducir música</button>
+    <audio id="musica-regalo" src="rola.mp3"></audio>
+    <audio id="musica-mañanitas" src="mañanitas.mp3"></audio>
+
+    <script>
+        const contenedor = document.getElementById('confeti');
+        const colores = ['#e63946', '#f1c40f', '#2ecc71', '#3498db', '#e67e22', '#ff6fb0', '#9b59b6', '#ffffff'];
+
+        function lanzarExplosion(cantidad = 180) {
+            for (let i = 0; i < cantidad; i++) {
+                const pieza = document.createElement('span');
+                const angulo = Math.random() * Math.PI * 2;
+                const distancia = 360 + Math.random() * 560;
+                const distanciaInicial = distancia * (.35 + Math.random() * .2);
+                const ancho = 7 + Math.random() * 9;
+                const alto = 12 + Math.random() * 18;
+
+                pieza.className = 'confeti-pieza';
+                pieza.style.setProperty('--x-explosion', `${Math.cos(angulo) * distanciaInicial}px`);
+                pieza.style.setProperty('--y-explosion', `${Math.sin(angulo) * distanciaInicial}px`);
+                pieza.style.setProperty('--x-final', `${Math.cos(angulo) * distancia + (Math.random() - .5) * 140}px`);
+                pieza.style.setProperty('--y-final', `${Math.sin(angulo) * distancia + 240 + Math.random() * 300}px`);
+                pieza.style.setProperty('--ancho', `${ancho}px`);
+                pieza.style.setProperty('--alto', `${alto}px`);
+                pieza.style.setProperty('--giro-1', `${(Math.random() - .5) * 720}deg`);
+                pieza.style.setProperty('--giro-2', `${(Math.random() - .5) * 1800}deg`);
+                pieza.style.setProperty('--color', colores[Math.floor(Math.random() * colores.length)]);
+                pieza.style.setProperty('--duracion', `${6 + Math.random() * 4}s`);
+                pieza.style.animationDelay = `${Math.random() * .45}s`;
+                contenedor.appendChild(pieza);
+                pieza.addEventListener('animationend', () => pieza.remove());
+            }
+        }
+
+        lanzarExplosion();
+        setTimeout(lanzarExplosion, 1800, 90);
+
+        const imagenPumpe = document.getElementById('imagen-pumpe');
+        const botonPastel = document.querySelector('.past');
+        const botonVelas = document.querySelector('.boton-velas');
+        const otrosBotones = document.querySelectorAll('.nopo, .sipi');
+        const botonRegalo = document.querySelector('.regalo');
+        const botonMañanitas = document.querySelector('.mañanitas');
+        const seccionRegalos = document.querySelector('.seccion-regalos');
+        const textoRegalo = document.querySelector('.texto-regalo');
+        const botonMusica = document.querySelector('.boton-musica');
+        const musicaRegalo = document.getElementById('musica-regalo');
+        const musicaMañanitas = document.getElementById('musica-mañanitas');
+        const cajasRegalo = document.querySelectorAll('.regalo-caja');
+
+        function pausarMusica() {
+            musicaRegalo.pause();
+            musicaMañanitas.pause();
+            botonMusica.textContent = 'Reproducir música';
+        }
+
+        botonPastel.addEventListener('click', () => {
+            pausarMusica();
+            imagenPumpe.src = 'pastel.png';
+            botonVelas.hidden = false;
+            seccionRegalos.hidden = true;
+            textoRegalo.hidden = true;
+        });
+
+        botonRegalo.addEventListener('click', () => {
+            pausarMusica();
+            imagenPumpe.src = 'hregalo.png';
+            botonVelas.hidden = true;
+            botonMusica.hidden = true;
+            seccionRegalos.hidden = false;
+            textoRegalo.hidden = true;
+        });
+
+        botonMañanitas.addEventListener('click', async () => {
+            pausarMusica();
+            imagenPumpe.src = 'mañanito.png';
+            imagenPumpe.alt = 'Mañanito';
+            botonVelas.hidden = true;
+            botonMusica.hidden = true;
+            seccionRegalos.hidden = true;
+            textoRegalo.hidden = true;
+
+            try {
+                await musicaMañanitas.play();
+            } catch (error) {
+                musicaMañanitas.pause();
+            }
+        });
+
+        otrosBotones.forEach((boton) => {
+            boton.addEventListener('click', () => {
+                pausarMusica();
+                botonVelas.hidden = true;
+                seccionRegalos.hidden = true;
+                textoRegalo.hidden = true;
+            });
+        });
+
+        cajasRegalo.forEach((caja) => {
+            const botonCaja = caja.querySelector('.boton-caja');
+
+            botonCaja.addEventListener('click', () => {
+                imagenPumpe.src = caja.dataset.imagen;
+                imagenPumpe.alt = caja.dataset.alt;
+                textoRegalo.textContent = {
+                    'flores.png': 'Lirios para mi delirio',
+                    'cancion.png': 'Serenata',
+                    'amores.png': 'El otro regalo soy yio'
+                }[caja.dataset.imagen];
+                textoRegalo.hidden = false;
+                botonMusica.hidden = caja.dataset.imagen !== 'cancion.png';
+                if (botonMusica.hidden) {
+                    pausarMusica();
+                }
+            });
+        });
+
+        botonMusica.addEventListener('click', async () => {
+            if (musicaRegalo.paused) {
+                try {
+                    await musicaRegalo.play();
+                    botonMusica.textContent = 'Pausar música';
+                } catch (error) {
+                    botonMusica.textContent = 'Reproducir música';
+                }
+            } else {
+                musicaRegalo.pause();
+                botonMusica.textContent = 'Reproducir música';
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                musicaRegalo.pause();
+                musicaMañanitas.pause();
+            }
+        });
+
+        musicaRegalo.addEventListener('ended', () => {
+            botonMusica.textContent = 'Reproducir música';
+        });
+
+        botonVelas.addEventListener('click', () => {
+            imagenPumpe.src = 'velas.png';
+            setTimeout(() => {
+                imagenPumpe.src = 'velasap.png';
+                lanzarExplosion();
+                setTimeout(lanzarExplosion, 1800, 90);
+            }, 2000);
+        });
+
+    </script>
+</body>
+</html>

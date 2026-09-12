@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valeamor</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="valeamor.css">
+</head>
+<body>
+    
+<div class= "fondo">
+    <img id="imagen-valeamor" src="pumpefoto.png" alt="Valeamor">
+    </div>
+
+    <div class="menu"> 
+        <a href="pumpe.html"><button type="button" >¿Es tu pumpeaños?</button></a><br>
+        <a href="carta.html"><button type="button" >Para Vale</button></a><br>
+        <a class="enlace-no-disponible" href="us.html"><button type="button" >Nosotros
+        </button></a><br>
+        <a class="enlace-no-disponible" href="about.html"><button type="button" >Extras</button></a>
+
+    </div>
+    <audio id="soundtrack" src="sound.mp3" loop></audio>
+    <script>
+        const soundtrack = document.getElementById('soundtrack');
+        soundtrack.volume = 0.24;
+        const tiempoGuardado = Number(sessionStorage.getItem('soundtrack-time'));
+        const estabaReproduciendo = sessionStorage.getItem('soundtrack-playing') !== 'false';
+
+        function reproducirSoundtrack() {
+            soundtrack.play().catch(() => {});
+        }
+
+        function restaurarSoundtrack() {
+            const restaurar = () => {
+                if (Number.isFinite(tiempoGuardado)) {
+                    soundtrack.currentTime = tiempoGuardado;
+                }
+                if (estabaReproduciendo) {
+                    reproducirSoundtrack();
+                }
+            };
+
+            if (soundtrack.readyState >= 1) {
+                restaurar();
+            } else {
+                soundtrack.addEventListener('loadedmetadata', restaurar, { once: true });
+            }
+        }
+
+        function guardarSoundtrack(conservarReproduccion = false) {
+            sessionStorage.setItem('soundtrack-time', String(soundtrack.currentTime));
+            if (conservarReproduccion || !document.hidden) {
+                sessionStorage.setItem('soundtrack-playing', String(!soundtrack.paused || conservarReproduccion));
+            }
+        }
+
+        restaurarSoundtrack();
+        document.addEventListener('pointerdown', reproducirSoundtrack, { once: true, capture: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                guardarSoundtrack(true);
+                soundtrack.pause();
+            } else {
+                reproducirSoundtrack();
+            }
+        });
+        window.addEventListener('pagehide', guardarSoundtrack);
+    </script>
+    <script>
+        document.querySelectorAll('.enlace-no-disponible').forEach((enlace) => {
+            enlace.addEventListener('click', (evento) => {
+                evento.preventDefault();
+                Swal.fire({
+                    title: 'Aún no está disponible',
+                    text: 'Esta sección estará lista muy pronto.',
+                    confirmButtonText: 'Entendido',
+                    confirmButtonColor: '#789b78'
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

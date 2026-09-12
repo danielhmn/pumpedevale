@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para vale</title>
+    <link rel="stylesheet" href="carta.css">
+</head>
+<body>
+    <main class="libro-carta">
+        <a class="volver-inicio" href="index.html">Volver al inicio</a>
+        <section class="portada-carta">
+            <p class="etiqueta-carta">Para Valeamor</p>
+            <h1>Starry Eyes</h1>
+            <p class="subtitulo-carta"></p>
+        </section>
+        <section class="hoja-carta">
+            <article class="contenido-carta">
+                <p>Para ti:</p>
+                <p>Al empezar a escribir esto, recordé que hay tantas cosas que olvidé escribirte antes; y de nuevo, no sé por dónde empezar. <br>
+                    Estoy tan preocupado de que realmente este no sea un buen día para ti, cuando los que más deseo siempre es que seas la chica
+                     más feliz, para poder ser el chico más feliz junto a ti. Ya soy el chico más feliz, lo he sido desde que te tuve en mi vida 
+                     de nuevo, desde ese nuevo comienzo que siempre soñé, desde ese momento donde empezamos a pensar en si de verdad queríamos
+                     estar juntos por siempre; yo siempre lo supe, siempre supe que quería experimentar todo contigo. Desde que te conocí, y 
+                     era apenas un niño de 13 años, sentí por primera vez contigo eso que todos alguna vez en la vida experimentamos; 
+                     inocentemente, sentí que me enamoré, cuando realmente no sabía todo lo que seguía en mi vida contigo.
+                     Me parece increíble que desde que siento que mi vida empezó, has estado ahí. Fuiste la primera persona que me hizo sentir de
+                     esa manera, y no necesariamente hablo de sentimientos lindos siempre; has sido la persona por la cuál he sufrido tanto 
+                     a lo largo de mi corta vida, pero, lo veo y lo pienso siempre de nuevo y me doy cuenta que no está mal, no es algo
+                     malo el hecho de sentirme así, simplemente, así es el amor, un amor que he sentido siempre por ti, igual de intensamente
+                     como el primer día. El hecho de tener tanta historia contigo y vernos ahora, me da mucha felicidad y me hace sentir muy afortunado
+                     porque eres la chica más increíble que conoceré en mi vida, de verdad lo eres.<br><br>
+                     Mientras hacía todo esto, la parte de la canción "Loco tu forma de ser", genuinamente me sentí raro, una increíble sensación de
+                     llorar por amor, por nostalgia, por felicidad. Pensando en tí en cada palabra, dándome cuenta de lo increíble que eres,
+                     que, aunque creas que has perdido esa chispa en ti, siempre está ahí, y te hace una chica increíble, toda tu forma de ser,
+                     tu personalidad tan única, esa chispa en tí nunca se irá.<br><br>
+                     "Starry eyes", realmente amo esa canción, al igual que la anterior, cada palabra me hace pensar en ti, me es inevitable sentirme
+                     así cada que la escucho. Porque realmente "Sólo te conocí en mis sueños antes, cuando era joven y estaba solo en el mundo. 
+                     Estuviste ahí cuando necesitaba a alguien para llamar 'Mi chica', y ahora eres mi realidad." <br><br>
+
+                    Nuevamente siento que esta carta es muy corta para expresar realemente cómo me haces sentir, pero no te preocupes, tenemos 
+                    una vida juntos por delante para hacerte saber cuánto te amo. 
+                    <br><br>
+                    Te amo tanto.
+                </p>
+ 
+                <p></p>
+            </article>
+        </section>
+    </main>
+    <audio id="soundtrack" src="sound.mp3" loop></audio>
+    <script>
+        const soundtrack = document.getElementById('soundtrack');
+        soundtrack.volume = 0.24;
+        const tiempoGuardado = Number(sessionStorage.getItem('soundtrack-time'));
+        const estabaReproduciendo = sessionStorage.getItem('soundtrack-playing') !== 'false';
+
+        function reproducirSoundtrack() {
+            soundtrack.play().catch(() => {});
+        }
+
+        function restaurarSoundtrack() {
+            const restaurar = () => {
+                if (Number.isFinite(tiempoGuardado)) {
+                    soundtrack.currentTime = tiempoGuardado;
+                }
+                if (estabaReproduciendo) {
+                    reproducirSoundtrack();
+                }
+            };
+
+            if (soundtrack.readyState >= 1) {
+                restaurar();
+            } else {
+                soundtrack.addEventListener('loadedmetadata', restaurar, { once: true });
+            }
+        }
+
+        function guardarSoundtrack(conservarReproduccion = false) {
+            sessionStorage.setItem('soundtrack-time', String(soundtrack.currentTime));
+            if (conservarReproduccion || !document.hidden) {
+                sessionStorage.setItem('soundtrack-playing', String(!soundtrack.paused || conservarReproduccion));
+            }
+        }
+
+        restaurarSoundtrack();
+        document.addEventListener('pointerdown', reproducirSoundtrack, { once: true, capture: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                guardarSoundtrack(true);
+                soundtrack.pause();
+            } else {
+                reproducirSoundtrack();
+            }
+        });
+        window.addEventListener('pagehide', guardarSoundtrack);
+
+    </script>
+</body>
+</html>
