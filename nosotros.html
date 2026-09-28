@@ -144,7 +144,7 @@
         }
 
         function actualizarOpcionActiva() {
-            const seccionActiva = window.location.hash || '#galeria';
+            const seccionActiva = window.location.hash;
             const seccionVisible = seccionesBloqueadas.includes(seccionActiva) ? '#galeria' : seccionActiva;
 
             opcionesMenu.forEach((opcion) => {
