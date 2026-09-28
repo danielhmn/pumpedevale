@@ -34,6 +34,22 @@ body{
     width: 180px;
 }
 
+.menu .etiqueta-nuevo{
+    display: inline-block;
+    margin-left: 40px;
+    padding: 3px 5px 2px;
+    border-radius: 3px;
+    background: #d77893;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: .48rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 1;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
 button:hover{
     cursor: pointer;
     transform: scale(1.04);
