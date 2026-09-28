@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosotros</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="nosotros.css">
+</head>
+<body>
+    <a class="boton-inicio" href="index.html" aria-label="Volver al inicio">
+        <span aria-hidden="true">↖</span>
+        <span>volver</span>
+    </a>
+
+    <main class="contenido-nosotros">
+        <section class="vista-seccion galeria" id="galeria" aria-labelledby="titulo-galeria">
+            <p class="numero-seccion">01 / galería</p><br>
+            <div class="rejilla-fotos" aria-live="polite"></div>
+        </section>
+
+        <section class="vista-seccion historia" id="historia" aria-labelledby="titulo-historia">
+            <p class="numero-seccion">02 / historia</p><br>
+            <p class="texto-lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae sem vel lorem tincidunt sollicitudin. Praesent sed justo at ipsum posuere fermentum, sed volutpat nunc gravida. Curabitur euismod, nibh nec tincidunt luctus, justo erat consequat erat, vitae posuere libero neque non augue.</p>
+        </section>
+
+        <section class="vista-seccion texto-seccion" id="momentos" aria-labelledby="titulo-momentos">
+            <p class="numero-seccion">03 / momentos</p>
+<br>
+            <p class="texto-lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus, mi at vulputate bibendum, justo erat commodo lectus, vitae feugiat purus sem vel neque. Donec ullamcorper, libero sed fermentum luctus, nibh ligula posuere sem, at porta nisl risus non augue.</p>
+        </section>
+
+        <section class="vista-seccion texto-seccion" id="about" aria-labelledby="titulo-about">
+            <p class="numero-seccion">04 / I Wolf You</p>
+<br>
+            <video class="video-iwy" autoplay loop playsinline preload="metadata" disablepictureinpicture>
+                <source src="iwy.mp4" type="video/mp4">
+                Tu navegador no puede reproducir este video.
+            </video>
+        </section>
+    </main>
+
+    <nav class="menu-pelicula" aria-label="Secciones de Valeamor">
+        <p class="etiqueta-menu">Valeamor / nosotros</p>
+        <a class="opcion-menu" href="#galeria">
+            <span class="numero-opcion">01</span>
+            <span class="texto-opcion"><strong>Galería</strong><small></small></span>
+            <span class="flecha-opcion" aria-hidden="true">↗</span>
+        </a>
+        <a class="opcion-menu" href="#historia">
+            <span class="numero-opcion">02</span>
+            <span class="texto-opcion"><strong>Secreto</strong><small></small></span>
+            <span class="flecha-opcion" aria-hidden="true">↗</span>
+        </a>
+        <a class="opcion-menu" href="#momentos">
+            <span class="numero-opcion">03</span>
+            <span class="texto-opcion"><strong>Secreto</strong><small></small></span>
+            <span class="flecha-opcion" aria-hidden="true">↗</span>
+        </a>
+        <a class="opcion-menu" href="#about">
+            <span class="numero-opcion">04</span>
+            <span class="texto-opcion"><strong>IWY</strong><small></small></span>
+            <span class="flecha-opcion" aria-hidden="true">↗</span>
+        </a>
+    </nav>
+
+    <script>
+        const opcionesMenu = document.querySelectorAll('.opcion-menu');
+        const secciones = document.querySelectorAll('.vista-seccion');
+        const video = document.querySelector('.video-iwy');
+        const galeria = document.querySelector('.rejilla-fotos');
+        const seccionesBloqueadas = ['#historia', '#momentos'];
+
+        function mostrarModalNoDisponible() {
+            Swal.fire({
+                title: 'Plan B',
+                text: 'Es un secreto, que tu mirada y la mia un presentimiento',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#789b78'
+            });
+        }
+
+        function shuffle(items) {
+            const copia = [...items];
+            for (let indice = copia.length - 1; indice > 0; indice -= 1) {
+                const aleatorio = Math.floor(Math.random() * (indice + 1));
+                [copia[indice], copia[aleatorio]] = [copia[aleatorio], copia[indice]];
+            }
+            return copia;
+        }
+
+        function obtenerOrdenGaleriaFijo(imagenes) {
+            const clave = 'valeamor-nosotros-galeria-order';
+            const ordenGuardado = localStorage.getItem(clave);
+
+            if (ordenGuardado) {
+                try {
+                    const indices = JSON.parse(ordenGuardado);
+                    if (Array.isArray(indices) && indices.length === imagenes.length) {
+                        return indices.map((indice) => imagenes[indice]);
+                    }
+                } catch (error) {
+                    console.warn('Orden guardado inválido, se regenerará.', error);
+                }
+            }
+
+            const ordenAleatorio = shuffle(imagenes.map((_, indice) => indice));
+            localStorage.setItem(clave, JSON.stringify(ordenAleatorio));
+            return ordenAleatorio.map((indice) => imagenes[indice]);
+        }
+
+        function cargarGaleria() {
+            const categorias = [
+                { tipo: 'alta', carpeta: 'fotos-alta', total: 51 },
+                { tipo: 'ancha', carpeta: 'fotos-ancha', total: 12 },
+                { tipo: 'grande', carpeta: 'fotos-grande', total: 8 }
+            ];
+
+            const imagenes = categorias.flatMap(({ tipo, carpeta, total }) =>
+                Array.from({ length: total }, (_, indice) => ({
+                    tipo,
+                    src: `${carpeta}/foto${indice + 1}.jpeg`
+                }))
+            );
+
+            obtenerOrdenGaleriaFijo(imagenes).forEach(({ tipo, src }, indice) => {
+                const figure = document.createElement('figure');
+                figure.className = `foto foto-${tipo}`;
+
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Foto ${indice + 1}`;
+                img.loading = 'lazy';
+
+                figure.appendChild(img);
+                galeria.appendChild(figure);
+            });
+        }
+
+        function activarAudio() {
+            if (!video) return;
+            video.muted = false;
+            video.play().catch(() => {});
+        }
+
+        function actualizarOpcionActiva() {
+            const seccionActiva = window.location.hash || '#galeria';
+            const seccionVisible = seccionesBloqueadas.includes(seccionActiva) ? '#galeria' : seccionActiva;
+
+            opcionesMenu.forEach((opcion) => {
+                opcion.classList.toggle('opcion-activa', opcion.getAttribute('href') === seccionVisible);
+            });
+
+            secciones.forEach((seccion) => {
+                seccion.classList.toggle('seccion-visible', `#${seccion.id}` === seccionVisible);
+            });
+
+            if (seccionActiva === '#about') {
+                if (!video) return;
+                video.currentTime = 0;
+                video.play().catch(() => {});
+            } else if (video) {
+                video.pause();
+            }
+        }
+
+        opcionesMenu.forEach((opcion) => {
+            opcion.addEventListener('click', (evento) => {
+                const href = opcion.getAttribute('href');
+
+                if (seccionesBloqueadas.includes(href)) {
+                    evento.preventDefault();
+                    mostrarModalNoDisponible();
+                    window.location.hash = '#galeria';
+                    return;
+                }
+
+                opcionesMenu.forEach((elemento) => elemento.classList.remove('opcion-activa'));
+                opcion.classList.add('opcion-activa');
+            });
+        });
+
+        window.addEventListener('hashchange', () => {
+            if (seccionesBloqueadas.includes(window.location.hash)) {
+                window.history.replaceState(null, '', '#galeria');
+                mostrarModalNoDisponible();
+            }
+            actualizarOpcionActiva();
+        });
+
+        cargarGaleria();
+        actualizarOpcionActiva();
+        window.addEventListener('click', activarAudio, { once: true });
+        window.addEventListener('touchstart', activarAudio, { once: true });
+        window.addEventListener('keydown', activarAudio, { once: true });
+    </script>
+</body>
+</html>
