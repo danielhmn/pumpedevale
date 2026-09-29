@@ -276,7 +276,7 @@ body {
 .scene-caption {
 	position: absolute;
 	z-index: 5;
-	bottom: 4px;
+	bottom: 27px;
 	left: 32px;
 	margin: 0;
 	color: rgb(239 233 218 / 68%);
