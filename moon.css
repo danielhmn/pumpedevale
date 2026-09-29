@@ -1,0 +1,347 @@
+:root {
+	color-scheme: dark;
+	--sky-top: #080d19;
+	--sky-middle: #172538;
+	--sky-low: #3e4850;
+	--moonlight: #fff2d0;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	width: 100%;
+	min-width: 320px;
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	overflow: hidden;
+	background: var(--sky-top);
+	color: #f3eee1;
+	font-family: Georgia, 'Times New Roman', serif;
+}
+
+.night-scene {
+	position: relative;
+	isolation: isolate;
+	width: 100%;
+	height: 100vh;
+	height: 100dvh;
+	overflow: hidden;
+	background:
+		linear-gradient(180deg, var(--sky-top) 0%, #111c2c 43%, var(--sky-middle) 69%, var(--sky-low) 100%);
+}
+
+.sky-glow {
+	position: absolute;
+	z-index: -1;
+	top: -32%;
+	left: 20%;
+	width: 70vw;
+	height: 95vh;
+	border-radius: 50%;
+	background: radial-gradient(ellipse, rgb(113 128 135 / 13%), transparent 68%);
+	filter: blur(24px);
+}
+
+.stars {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+.stars--distant {
+	opacity: .64;
+	background-image:
+		radial-gradient(1px 1px at 15px 25px, #fff 98%, transparent),
+		radial-gradient(1px 1px at 105px 75px, #dce7ed 98%, transparent),
+		radial-gradient(1px 1px at 205px 35px, #fff 98%, transparent),
+		radial-gradient(1px 1px at 265px 135px, #e9e4d5 98%, transparent),
+		radial-gradient(1px 1px at 65px 185px, #fff 98%, transparent),
+		radial-gradient(1px 1px at 175px 225px, #dce7ed 98%, transparent);
+	background-size: 310px 270px;
+	animation: star-breathe 8s ease-in-out infinite alternate;
+}
+
+.stars--near {
+	opacity: .7;
+	background-image:
+		radial-gradient(1.5px 1.5px at 45px 55px, #fff6dd 98%, transparent),
+		radial-gradient(1px 1px at 145px 125px, #fff 98%, transparent),
+		radial-gradient(1px 1px at 245px 15px, #fff 98%, transparent),
+		radial-gradient(1.5px 1.5px at 295px 195px, #fff6dd 98%, transparent);
+	background-size: 360px 250px;
+	animation: star-breathe 5s ease-in-out -2s infinite alternate-reverse;
+}
+
+.moon-path {
+	position: absolute;
+	z-index: 1;
+	top: 10%;
+	right: 13%;
+	width: clamp(170px, 25vw, 300px);
+	aspect-ratio: 1;
+	animation: moon-drift 48s ease-in-out infinite alternate;
+}
+
+.moon-halo {
+	position: absolute;
+	inset: -37%;
+	border-radius: 50%;
+	background: radial-gradient(circle, rgb(255 236 194 / 15%) 0%, rgb(221 218 205 / 6%) 35%, transparent 69%);
+	filter: blur(9px);
+}
+
+.moon {
+	position: absolute;
+	inset: 14%;
+	overflow: hidden;
+	border-radius: 50%;
+	filter: contrast(1.14) saturate(.9);
+	background:
+		radial-gradient(ellipse at 69% 75%, rgb(82 81 76 / 58%) 0 7%, transparent 7.5%),
+		radial-gradient(ellipse at 39% 69%, rgb(115 111 101 / 32%) 0 12%, transparent 12.5%),
+		radial-gradient(ellipse at 66% 35%, rgb(115 111 101 / 36%) 0 13%, transparent 13.5%),
+		radial-gradient(ellipse at 31% 33%, rgb(104 101 94 / 27%) 0 16%, transparent 16.5%),
+		radial-gradient(circle at 33% 27%, #fff8df 0%, #e6dfca 38%, #c2bdaf 72%, #777a78 100%);
+	box-shadow:
+		inset -13px -7px 18px rgb(39 44 47 / 58%),
+		inset 8px 7px 13px rgb(255 255 239 / 58%),
+		0 0 30px rgb(255 237 197 / 16%);
+}
+
+.moon::after {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: linear-gradient(115deg, transparent 40%, rgb(53 58 60 / 10%) 74%, rgb(27 36 42 / 50%) 100%);
+	content: '';
+}
+
+.crater {
+	position: absolute;
+	z-index: 1;
+	border-radius: 50%;
+	background: radial-gradient(ellipse at 34% 30%, rgb(79 78 73 / 42%) 0 22%, rgb(119 115 105 / 48%) 47%, rgb(239 232 211 / 30%) 59%, rgb(117 113 103 / 12%) 69%, transparent 73%);
+	box-shadow: inset 2px 2px 3px rgb(71 70 66 / 32%), 1px 1px 2px rgb(255 251 231 / 36%);
+}
+
+.crater--large {
+	top: 44%;
+	left: 22%;
+	width: 28%;
+	aspect-ratio: 1;
+}
+
+.crater--upper {
+	top: 13%;
+	left: 58%;
+	width: 17%;
+	aspect-ratio: 1;
+}
+
+.crater--lower {
+	top: 67%;
+	left: 58%;
+	width: 13%;
+	aspect-ratio: 1;
+}
+
+.crater--small {
+	top: 34%;
+	left: 67%;
+	width: 8%;
+	aspect-ratio: 1;
+}
+
+.crater--edge {
+	top: 59%;
+	left: 10%;
+	width: 9%;
+	aspect-ratio: 1;
+}
+
+.moon-grain {
+	position: absolute;
+	z-index: 2;
+	inset: 0;
+	border-radius: inherit;
+	opacity: .08;
+	background-image: repeating-radial-gradient(ellipse at 31% 42%, transparent 0 3px, rgb(75 73 69 / 24%) 4px, transparent 5px 8px);
+	mix-blend-mode: multiply;
+}
+
+.cloud {
+	position: absolute;
+	z-index: 2;
+	width: 75vw;
+	height: 28vh;
+	border-radius: 50%;
+	background: radial-gradient(ellipse, rgb(171 176 169 / 10%), rgb(115 129 138 / 8%) 35%, transparent 70%);
+	filter: blur(29px);
+	pointer-events: none;
+}
+
+.cloud--high {
+	top: 42%;
+	left: -25%;
+	animation: cloud-drift 75s ease-in-out infinite alternate;
+}
+
+.cloud--low {
+	right: -30%;
+	bottom: 16%;
+	width: 90vw;
+	opacity: .75;
+	animation: cloud-drift 95s ease-in-out -30s infinite alternate-reverse;
+}
+
+.shooting-star {
+	position: absolute;
+	z-index: 1;
+	top: 19%;
+	left: 12%;
+	width: 105px;
+	height: 1px;
+	opacity: 0;
+	transform: rotate(-31deg);
+	transform-origin: right center;
+	background: linear-gradient(90deg, transparent, rgb(255 250 225 / 88%));
+	animation: shooting-star 14s ease-in 4s infinite;
+}
+
+.distant-ridge,
+.near-ridge {
+	position: absolute;
+	right: -3%;
+	bottom: -1px;
+	left: -3%;
+	pointer-events: none;
+}
+
+.distant-ridge {
+	z-index: 3;
+	height: 25%;
+	background: linear-gradient(180deg, #202d32, #121c20);
+	clip-path: polygon(0 65%, 9% 39%, 18% 61%, 28% 25%, 38% 59%, 50% 34%, 62% 66%, 72% 30%, 83% 57%, 92% 35%, 100% 58%, 100% 100%, 0 100%);
+}
+
+.near-ridge {
+	z-index: 4;
+	height: 15%;
+	background: linear-gradient(180deg, #151d1e, #090f12 75%);
+	clip-path: polygon(0 55%, 10% 34%, 19% 69%, 31% 39%, 44% 73%, 57% 31%, 69% 63%, 79% 38%, 91% 66%, 100% 44%, 100% 100%, 0 100%);
+}
+
+.night-mist {
+	position: absolute;
+	z-index: 2;
+	right: -10%;
+	bottom: 7%;
+	left: -10%;
+	height: 19%;
+	background: linear-gradient(180deg, transparent, rgb(177 185 175 / 7%), transparent);
+	filter: blur(17px);
+}
+
+.back-link {
+	position: absolute;
+	z-index: 5;
+	top: 28px;
+	left: 32px;
+	color: rgb(245 239 223 / 76%);
+	font: 14px/1.4 Georgia, 'Times New Roman', serif;
+	text-decoration: none;
+	transition: color 180ms ease;
+}
+
+.back-link span {
+	display: inline-block;
+	margin-right: 7px;
+	transition: transform 180ms ease;
+}
+
+.back-link:hover {
+	color: #fff8e8;
+}
+
+.back-link:hover span {
+	transform: translateX(-4px);
+}
+
+.scene-caption {
+	position: absolute;
+	z-index: 5;
+	bottom: 4px;
+	left: 32px;
+	margin: 0;
+	color: rgb(239 233 218 / 68%);
+	font-size: 13px;
+	font-style: italic;
+	letter-spacing: .04em;
+}
+
+@keyframes star-breathe {
+	from { opacity: .35; }
+	to { opacity: .9; }
+}
+
+@keyframes moon-drift {
+	from { transform: translate3d(0, 12px, 0); }
+	to { transform: translate3d(-10vw, -20px, 0); }
+}
+
+@keyframes cloud-drift {
+	from { transform: translate3d(-4%, 5px, 0) scale(1); }
+	to { transform: translate3d(8%, -9px, 0) scale(1.08); }
+}
+
+@keyframes shooting-star {
+	0%, 78%, 100% { opacity: 0; transform: translate3d(0, 0, 0) rotate(-31deg); }
+	80% { opacity: 1; }
+	86% { opacity: 0; transform: translate3d(180px, 105px, 0) rotate(-31deg); }
+}
+
+@media (max-width: 600px) {
+	.moon-path {
+		top: 18%;
+		right: 7%;
+		width: clamp(164px, 48vw, 230px);
+	}
+
+	.cloud--high {
+		top: 39%;
+	}
+
+	.distant-ridge {
+		height: 21%;
+	}
+
+	.near-ridge {
+		height: 13%;
+	}
+
+	.back-link {
+		top: 22px;
+		left: 20px;
+	}
+
+	.scene-caption {
+		bottom: 20px;
+		left: 20px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: .01ms !important;
+		animation-iteration-count: 1 !important;
+		scroll-behavior: auto !important;
+	}
+}
